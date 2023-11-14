@@ -73,9 +73,9 @@ def get_userdata_whichfile(u_id):
 # 해당 사용자의 찜 데이터를 받아와서 찜 리스트를 반환하는 함수
 def get_wishlist_data(u_data):
     
-    with open("wishlist_data.json", 'r', encoding='utf-8') as f:
+    with open("wishlist_dataset.json", 'r', encoding='utf-8') as f:
         dataset = json.load(f)
-
+    
     for data in dataset:
         if  u_data["ID"] == data["ID"]:
             return data["wishIDs"]
@@ -85,7 +85,7 @@ def get_wishlist_data(u_data):
 # 실제 모든 매칭 데이터를 받아와서 반환하는 함수
 def get_matching_data():
     
-    with open("matching_data.json", 'r', encoding='utf-8') as f:
+    with open("matching_dataset.json", 'r', encoding='utf-8') as f:
         dataset = json.load(f)
     
     return dataset
@@ -93,7 +93,7 @@ def get_matching_data():
 # 이전 추천 기록을 받아와서 추천했던 리스트를 반환하는 함수
 def get_recommended_data(u_data):
     
-    with open("recommended_data.json", 'r', encoding='utf-8') as f:
+    with open("recommended_dataset.json", 'r', encoding='utf-8') as f:
         dataset = json.load(f)
         
     for data in dataset:
@@ -105,7 +105,7 @@ def get_recommended_data(u_data):
 # 룸메이트 찾기 상태 데이터를 받아와서 반환하는 함수
 def get_state_data():
     
-    with open("state_data.json", 'r', encoding='utf-8') as f:
+    with open("state_dataset.json", 'r', encoding='utf-8') as f:
         dataset = json.load(f)
         
     return dataset
@@ -113,7 +113,7 @@ def get_state_data():
 # wishlist.json 파일을 업데이트하는 함수
 def update_wishlist(wishlist):
     
-    with open("wishlist_data.json", 'r', encoding='utf-8') as f:
+    with open("wishlist_dataset.json", 'r', encoding='utf-8') as f:
         dataset = json.load(f)
     
     found = False
@@ -126,7 +126,7 @@ def update_wishlist(wishlist):
         temp = {"ID": wishlist["ID"], "wishIDs": [wishlist["wishID"]]}
         dataset.append(temp)
                   
-    with open('wishlist_data.json', 'w', encoding='utf-8') as f:
+    with open('wishlist_dataset.json', 'w', encoding='utf-8') as f:
         json.dump(dataset, f)
     
     return
@@ -134,12 +134,12 @@ def update_wishlist(wishlist):
 # matching_data.json을 업데이트하는 함수 - 한 번 매칭되면 변경 불가 가정
 def update_matching_data(matching):
     
-    with open("matching_data.json", 'r', encoding='utf-8') as f:
+    with open("matching_dataset.json", 'r', encoding='utf-8') as f:
         dataset = json.load(f)
         
     dataset.append(matching)
             
-    with open('matching_data.json', 'w', encoding='utf-8') as f:
+    with open('matching_dataset.json', 'w', encoding='utf-8') as f:
         json.dump(dataset, f)
     
     return
@@ -147,14 +147,19 @@ def update_matching_data(matching):
 # recommended_data.json을 업데이트하는 함수
 def update_recommended_data(u_data, recommendedIDs):
     
-    with open("recommended_data.json", 'r', encoding='utf-8') as f:
+    with open("recommended_dataset.json", 'r', encoding='utf-8') as f:
         dataset = json.load(f)
-        
+    
+    found = False
     for data in dataset:
         if u_data["ID"] == data["ID"]:
+            found = True
             data["recommendedIDs"] = recommendedIDs
-            
-    with open('recommended_data.json', 'w', encoding='utf-8') as f:
+    if not found:
+        temp = {"ID": u_data["ID"], "recommendedIDs": recommendedIDs}
+        dataset.append(temp)
+    
+    with open('recommended_dataset.json', 'w', encoding='utf-8') as f:
         json.dump(dataset, f)
     
     return
@@ -162,7 +167,7 @@ def update_recommended_data(u_data, recommendedIDs):
 # state_data.json을 업데이트하는 함수
 def update_state_data(state):
     
-    with open("state_data.json", 'r', encoding='utf-8') as f:
+    with open("state_dataset.json", 'r', encoding='utf-8') as f:
         dataset = json.load(f)
         
     for data in dataset:
@@ -171,7 +176,7 @@ def update_state_data(state):
             break    
     dataset.append(state)
             
-    with open('state_data.json', 'w', encoding='utf-8') as f:
+    with open('state_dataset.json', 'w', encoding='utf-8') as f:
         json.dump(dataset, f)
     
     return
@@ -237,6 +242,7 @@ def sensitive_score_similarity_ranking(u_data, f_name):
         dataset = json.load(f)
     
     dataset, user_data = fse.modify(dataset, u_data)
+    dataset = check_cluster(u_data, f_name)
     
     df = pd.DataFrame(dataset)
     n_array = df.to_numpy()
@@ -356,6 +362,34 @@ def check_recommended_data(u_data, a, b, c):
     
     return result
 
+# 같은 클러스터에 속하는 사용자의 정보만 반환하는 함수
+def check_cluster(u_data, f_name):
+    
+    with open(f_name, 'r', encoding='utf-8') as f:
+        dataset = json.load(f)
+    
+    if f_name == "man_308_dataset.json":
+        f_name = "man_308_cluster_dataset.json"
+    elif f_name == "man_309_dataset.json":
+        f_name = "man_309_cluster_dataset.json"
+    elif f_name == "woman_308_dataset.json":
+        f_name = "woman_308_cluster_dataset.json"
+    elif f_name == "woman_309_dataset.json":
+        f_name = "woman_309_cluster_dataset.json"
+    
+    with open(f_name, 'r', encoding='utf-8') as f:
+        cluster_dataset = json.load(f)
+    
+    cluster = -1
+    for cluster_data in cluster_dataset:
+        if u_data["ID"] == cluster_data["ID"]:
+            cluster = cluster_data["cluster"]
+            
+    result = [cluster_data["ID"] for cluster_data in cluster_dataset if cluster == cluster_data["cluster"]]
+    result = [data for data in dataset if data["ID"] in result]
+    
+    return result
+    
 # 전체 추천 목록 업데이트
 def update_user():
       
