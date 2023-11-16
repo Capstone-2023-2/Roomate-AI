@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 import featureByScore as fsc
 import featureBySensitivity as fse
-from sklearn.metrics.pairwise import cosine_similarity
+from sklearn.metrics.pairwise import euclidean_distances
 
 
 # 충분한 사용자 데이터가 있는지 파악하여 추천이 가능한지 반화하는 함수
@@ -217,8 +217,8 @@ def score_similarity_ranking(u_data, f_name):
     IDs = n_array[:, 0]
     features = n_array[:, 1:]
     
-    cosine_similarities = cosine_similarity(features, features)
-    ranking = np.argsort(cosine_similarities[-1])[::-1]
+    euclidean_distances_result = euclidean_distances(features, features)
+    ranking = np.argsort(euclidean_distances_result)[-1]
     ranking = ranking.tolist()
     
     for rank in ranking:
@@ -242,8 +242,8 @@ def total_similarity_ranking(u_data, f_name):
     IDs = n_array[:, 0]
     features = n_array[:, 1:]
     
-    cosine_similarities = cosine_similarity(features, features)
-    ranking = np.argsort(cosine_similarities[-1])[::-1]
+    euclidean_distances_result = euclidean_distances(features, features)
+    ranking = np.argsort(euclidean_distances_result)[-1]
     ranking = ranking.tolist()
     
     for rank in ranking:
@@ -272,8 +272,8 @@ def sensitive_score_similarity_ranking(u_data, f_name):
     IDs = n_array[:, 0]
     features = n_array[:, 1:]
     
-    cosine_similarities = cosine_similarity(features, features)
-    ranking = np.argsort(cosine_similarities[-1])[::-1]
+    euclidean_distances_result = euclidean_distances(features, features)
+    ranking = np.argsort(euclidean_distances_result)[-1]
     ranking = ranking.tolist()
     
     for rank in ranking:
