@@ -15,40 +15,40 @@ app.add_middleware(
     allow_headers=["*"],
 )
 class UserData(BaseModel):
-    ID: int
-    sleep_score: int
-    wakeup_score: int
-    lifestyle_sensitivity: int
-    cleaning_score: int
-    cleaning_sensitivity: int
-    indoor_food_score: int
-    indoor_food_sensitivity: int
-    smoking_score: int
-    indoor_study_score: int
-    indoor_study_sensitivity: int
-    indoor_noise_score: int
-    indoor_noise_sensitivity: int
-    alarm_score: int
-    alarm_sensitivity: int
-    late_study_score: int
-    late_study_sensitivity: int
-    sleeping_habit_score: int
-    sleeping_habit_sensitivity: int
-    intimacy_score: int
-    overnight_score: int
-    overnight_sensitivity: int
-    hot_or_cold: int
-    summer_or_winter: int
+    userId: int
+    bedtimeScore: int
+    wakeupScore: int
+    wakeupSensitivity: int
+    cleaningScore: int
+    cleaningSensitivity: int
+    foodScore: int
+    foodSensitivity: int
+    cigaretteScore: int
+    studyScore: int
+    studySensitivity: int
+    notebookScore: int
+    notebookSensitivity: int
+    alarmScore: int
+    alarmSensitivity: int
+    latestudyScore: int
+    latestudySensitivity: int
+    snoringScore: int
+    snoringSensitivity: int
+    friendlyScore: int
+    inhomeScore: int
+    inhomeSensitivity: int
+    coldOrHot: int
+    summerOrWinter: int
 class UpdatingData(BaseModel):
-    ID: int
+    userId: int
 class WishlistData(BaseModel):
-    ID: int
-    wishID: int
+    userId: int
+    wishId: int
 class MatchingData(BaseModel):
-    ID: int
-    matchingID: int
+    userId: int
+    matchingId: int
 class StateData(BaseModel):
-    ID: int
+    userId: int
     state: bool
 
 # 308관 남자 추천 API 엔드포인트: /8m_rec
@@ -73,18 +73,18 @@ def man_309_recommendation(data: UserData):
 # input: {"ID": int, "_score": int, "_sensitivity": int, ...}
 # output: {"IDs": [int, int, ...]}
 @app.post('/8w_rec')
-def man_308_recommendation(data: UserData):
+def woman_308_recommendation(data: UserData):
     data = jsonable_encoder(data)
-    response = main.main(data, "man_308_dataset.json")
+    response = main.main(data, "woman_308_dataset.json")
     return response
 
 # 309관 여자 추천 API 엔드포인트: /9w_rec
 # input: {"ID": int, "_score": int, "_sensitivity": int, ...}
 # output: {"IDs": [int, int, ...]}
 @app.post('/9w_rec')
-def man_309_recommendation(data: UserData):
+def woman_309_recommendation(data: UserData):
     data = jsonable_encoder(data)
-    response = main.main(data, "man_309_dataset.json")
+    response = main.main(data, "woman_309_dataset.json")
     return response
 
 # 추천 리스트 업데이트 API 엔드포인트: /up_rec
@@ -123,8 +123,10 @@ def seeking_state_update(data: StateData):
     func.update_state_data(data)
     return Response(content=None, status_code=200)
 
-# 서버 실행 코드
-if __name__ == '__main__':
-    import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=5000, reload=True)
-    #uvicorn appController:app --reload
+# 테스트용 API 엔드포인트 : /hello
+@app.get('/hello')
+def hello():
+    return {"message": "Hello World!"}
+
+# 서버 실행 명령어 (localhost:8080)
+# uvicorn appController:app --host=localhost --port=8080 --reload

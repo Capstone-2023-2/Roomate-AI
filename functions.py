@@ -24,7 +24,7 @@ def del_user(u_data, f_name):
         dataset = json.load(f)
     
     for data in dataset:
-        if u_data["ID"] == data["ID"]:
+        if u_data["userId"] == data["userId"]:
             dataset.remove(data)
             break
         
@@ -38,11 +38,31 @@ def add_user(u_data, f_name):
     
     dataset = del_user(u_data, f_name)
     dataset.append(u_data)
+    add_state(u_data)
     
     with open(f_name, 'w', encoding='utf-8') as f:
         json.dump(dataset, f)
     
     return dataset
+
+# 신규 사용자의 찾기 상태를 true로 바꾸는 함수
+def add_state(u_data):
+    
+    with open("state_dataset.json", 'r', encoding='utf-8') as f:
+        dataset = json.load(f)
+    
+    for data in dataset:
+        if u_data["userId"] == data["userId"]:
+            dataset.remove(data)
+            break
+    
+    temp = {"userId": u_data["userId"], "state": True}
+    dataset.append(temp)
+    
+    with open("state_dataset.json", 'w', encoding='utf-8') as f:
+        json.dump(dataset, f)
+    
+    return
 
 # ID로 사용자의 정보를 받아와서 반환하는 함수
 def get_userdata(u_id, f_name):
@@ -51,7 +71,7 @@ def get_userdata(u_id, f_name):
         dataset = json.load(f)
     
     for data in dataset:
-        if u_id == data["ID"]:
+        if u_id == data["userId"]:
             return data
     
     return {}
@@ -65,7 +85,7 @@ def get_userdata_whichfile(u_id):
         with open(f_name, 'r', encoding='utf-8') as f:
             dataset = json.load(f)
         for data in dataset:
-            if u_id == data["ID"]:
+            if u_id == data["userId"]:
                 return data, f_name
     
     return {}
@@ -77,8 +97,8 @@ def get_wishlist_data(u_data):
         dataset = json.load(f)
     
     for data in dataset:
-        if  u_data["ID"] == data["ID"]:
-            return data["wishIDs"]
+        if  u_data["userId"] == data["userId"]:
+            return data["wishIds"]
     
     return []
 
@@ -97,8 +117,8 @@ def get_recommended_data(u_data):
         dataset = json.load(f)
         
     for data in dataset:
-        if u_data["ID"] == data["ID"]:
-            return data["recommendedIDs"]
+        if u_data["userId"] == data["userId"]:
+            return data["recommendedIds"]
     
     return []
 
@@ -118,12 +138,12 @@ def update_wishlist(wishlist):
     
     found = False
     for data in dataset:
-        if wishlist["ID"] == data["ID"]:
+        if wishlist["userId"] == data["userId"]:
             found = True
-            data["wishIDs"].append(wishlist["wishID"])
+            data["wishIds"].append(wishlist["wishId"])
             break
     if not found:
-        temp = {"ID": wishlist["ID"], "wishIDs": [wishlist["wishID"]]}
+        temp = {"userId": wishlist["userId"], "wishIds": [wishlist["wishId"]]}
         dataset.append(temp)
                   
     with open('wishlist_dataset.json', 'w', encoding='utf-8') as f:
@@ -152,11 +172,11 @@ def update_recommended_data(u_data, recommendedIDs):
     
     found = False
     for data in dataset:
-        if u_data["ID"] == data["ID"]:
+        if u_data["userId"] == data["userId"]:
             found = True
-            data["recommendedIDs"] = recommendedIDs
+            data["recommendedIds"] = recommendedIDs
     if not found:
-        temp = {"ID": u_data["ID"], "recommendedIDs": recommendedIDs}
+        temp = {"userId": u_data["userId"], "recommendedIds": recommendedIDs}
         dataset.append(temp)
     
     with open('recommended_dataset.json', 'w', encoding='utf-8') as f:
@@ -171,7 +191,7 @@ def update_state_data(state):
         dataset = json.load(f)
         
     for data in dataset:
-        if state["ID"] == data["ID"]:
+        if state["userId"] == data["userId"]:
             dataset.remove(data)
             break    
     dataset.append(state)
@@ -198,13 +218,13 @@ def score_similarity_ranking(u_data, f_name):
     features = n_array[:, 1:]
     
     cosine_similarities = cosine_similarity(features, features)
-    ranking = np.argsort(cosine_similarities[0])[::-1]
+    ranking = np.argsort(cosine_similarities[-1])[::-1]
     ranking = ranking.tolist()
     
     for rank in ranking:
         result.append(IDs[rank])
-    if u_data["ID"] in result: 
-        result.remove(u_data["ID"])
+    if u_data["userId"] in result: 
+        result.remove(u_data["userId"])
     
     return result
 
@@ -223,13 +243,13 @@ def total_similarity_ranking(u_data, f_name):
     features = n_array[:, 1:]
     
     cosine_similarities = cosine_similarity(features, features)
-    ranking = np.argsort(cosine_similarities[0])[::-1]
+    ranking = np.argsort(cosine_similarities[-1])[::-1]
     ranking = ranking.tolist()
     
     for rank in ranking:
         result.append(IDs[rank])
-    if u_data["ID"] in result: 
-        result.remove(u_data["ID"])
+    if u_data["userId"] in result: 
+        result.remove(u_data["userId"])
     
     return result
 
@@ -241,8 +261,10 @@ def sensitive_score_similarity_ranking(u_data, f_name):
     with open(f_name, 'r', encoding='utf-8') as f:
         dataset = json.load(f)
     
+    #dataset = [data for data in dataset if u_data["smoking_score"] == data["smoking_score"]]
+    
     dataset, user_data = fse.modify(dataset, u_data)
-    dataset = check_cluster(u_data, f_name)
+    #dataset = check_cluster(u_data, f_name)
     
     df = pd.DataFrame(dataset)
     n_array = df.to_numpy()
@@ -251,13 +273,13 @@ def sensitive_score_similarity_ranking(u_data, f_name):
     features = n_array[:, 1:]
     
     cosine_similarities = cosine_similarity(features, features)
-    ranking = np.argsort(cosine_similarities[0])[::-1]
+    ranking = np.argsort(cosine_similarities[-1])[::-1]
     ranking = ranking.tolist()
     
     for rank in ranking:
         result.append(IDs[rank])
-    if u_data["ID"] in result: 
-        result.remove(u_data["ID"])
+    if u_data["userId"] in result: 
+        result.remove(u_data["userId"])
     result = [int(res) for res in result]
     
     return result
@@ -281,7 +303,7 @@ def wishlist_filtering_recommend(u_data, f_name):
     for i in range(20):
         for j in range(len(res)):
             temp = res[j][i]
-            if temp not in result and temp != u_data["ID"]:
+            if temp not in result and temp != u_data["userId"]:
                 result.append(res[j][i])   
     
     return result
@@ -295,17 +317,17 @@ def result_filtering_recommend(u_data, f_name):
     
     for sim in similar:
         for match in matching:
-            if sim == match["ID"]:
-                res.append(score_similarity_ranking(get_userdata(match["matchingID"], f_name), f_name)[0:20])
+            if sim == match["userId"]:
+                res.append(score_similarity_ranking(get_userdata(match["matchingId"], f_name), f_name)[0:20])
                 break
-            elif sim == match["matchingID"]:
-                res.append(score_similarity_ranking(get_userdata(match["ID"], f_name), f_name)[0:20])
+            elif sim == match["matchingId"]:
+                res.append(score_similarity_ranking(get_userdata(match["userId"], f_name), f_name)[0:20])
                 break
     
     for i in range(20):
         for j in range(len(res)):
             temp = res[j][i]
-            if temp not in result and temp != u_data["ID"]:
+            if temp not in result and temp != u_data["userId"]:
                 result.append(res[j][i])
     
     return result
@@ -318,7 +340,7 @@ def check_seeking_state(recommends):
     
     for rec_id in recommends:
         for state in state_data:
-            if rec_id == state["ID"] and state["state"]:
+            if rec_id == state["userId"] and state["state"]:
                 result.append(rec_id)
                 break
                     
@@ -382,11 +404,11 @@ def check_cluster(u_data, f_name):
     
     cluster = -1
     for cluster_data in cluster_dataset:
-        if u_data["ID"] == cluster_data["ID"]:
+        if u_data["userId"] == cluster_data["userId"]:
             cluster = cluster_data["cluster"]
             
-    result = [cluster_data["ID"] for cluster_data in cluster_dataset if cluster == cluster_data["cluster"]]
-    result = [data for data in dataset if data["ID"] in result]
+    result = [cluster_data["userId"] for cluster_data in cluster_dataset if cluster == cluster_data["cluster"]]
+    result = [data for data in dataset if data["userId"] in result]
     
     return result
     

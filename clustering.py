@@ -15,14 +15,14 @@ def clustering(u_data, f_name):
     clustering_dataset = fsc.clustering_modify(dataset)
 
     df = pd.DataFrame(clustering_dataset)
-    IDs = df['ID'].tolist()
-    df = df.drop('ID', axis=1)
+    IDs = df['userId'].tolist()
+    df = df.drop('userId', axis=1)
 
     kmeans = KMeans(n_clusters=3, random_state=10, n_init=10)
     kmeans.fit(df)
     
     for i, label in enumerate(kmeans.labels_):
-        temp = {"ID": IDs[i], "cluster": str(label)}
+        temp = {"userId": IDs[i], "cluster": str(label)}
         result.append(temp)
     
     if f_name == "man_308_dataset.json":

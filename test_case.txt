@@ -1,8 +1,7 @@
-성향 점수가 평균적인 사람
--> {"ID":201,"sleep_score":3,"wakeup_score":3,"lifestyle_sensitivity":2,"cleaning_score":2,"cleaning_sensitivity":2,"indoor_food_score":2,"indoor_food_sensitivity":2,"smoking_score":3,"indoor_study_score":2,"indoor_study_sensitivity":2,"indoor_noise_score":2,"indoor_noise_sensitivity":2,"alarm_score":2,"alarm_sensitivity":2,"late_study_score":3,"late_study_sensitivity":2,"sleeping_habit_score":2,"sleeping_habit_sensitivity":2,"intimacy_score":1,"overnight_score":2,"overnight_sensitivity":2,"hot_or_cold":2,"summer_or_winter":1}
+메인 페르소나(청결에 민감, 비흡연자, 내향적)
+아침형 + 내향적 + 더운곳 = 토끼
+-> {"userId":1111,"bedtimeScore":3,"wakeupScore":3,"wakeupSensitivity":1,"cleaningScore":3,"cleaningSensitivity":3,"foodScore":2,"foodSensitivity":2,"cigaretteScore":3,"studyScore":2,"studySensitivity":1,"notebookScore":3,"notebookSensitivity":2,"alarmScore":3,"alarmSensitivity":2,"latestudyScore":3,"latestudySensitivity":1,"snoringScore":3,"snoringSensitivity":2,"friendlyScore":3,"inhomeScore":2,"inhomeSensitivity":1,"coldOrHot":1,"summerOrWinter":1}
 
-성향 점수가 이상적인 사람
--> {"ID":202,"sleep_score":3,"wakeup_score":3,"lifestyle_sensitivity":1,"cleaning_score":3,"cleaning_sensitivity":1,"indoor_food_score":3,"indoor_food_sensitivity":1,"smoking_score":3,"indoor_study_score":3,"indoor_study_sensitivity":1,"indoor_noise_score":3,"indoor_noise_sensitivity":1,"alarm_score":3,"alarm_sensitivity":1,"late_study_score":3,"late_study_sensitivity":1,"sleeping_habit_score":3,"sleeping_habit_sensitivity":1,"intimacy_score":1,"overnight_score":3,"overnight_sensitivity":1,"hot_or_cold":0,"summer_or_winter":1}
-
-성향 점수가 좋지않은 사람
--> {"ID":203,"sleep_score":5,"wakeup_score":5,"lifestyle_sensitivity":3,"cleaning_score":1,"cleaning_sensitivity":3,"indoor_food_score":1,"indoor_food_sensitivity":3,"smoking_score":1,"indoor_study_score":1,"indoor_study_sensitivity":3,"indoor_noise_score":1,"indoor_noise_sensitivity":3,"alarm_score":1,"alarm_sensitivity":3,"late_study_score":1,"late_study_sensitivity":3,"sleeping_habit_score":1,"sleeping_habit_sensitivity":3,"intimacy_score":3,"overnight_score":1,"overnight_sensitivity":3,"hot_or_cold":2,"summer_or_winter":3}
+서브 페르소나(흡연자, 실내 공부에 민감, 야간 실내 공부에 민감, 외향적)
+저녁형 + 외향적 + 추운곳 = 늑대
+-> {"userId":2222,"bedtimeScore":4,"wakeupScore":3,"wakeupSensitivity":1,"cleaningScore":2,"cleaningSensitivity":2,"foodScore":1,"foodSensitivity":1,"cigaretteScore":1,"studyScore":3,"studySensitivity":3,"notebookScore":3,"notebookSensitivity":2,"alarmScore":2,"alarmSensitivity":1,"latestudyScore":3,"latestudySensitivity":3,"snoringScore":3,"snoringSensitivity":1,"friendlyScore":1,"inhomeScore":2,"inhomeSensitivity":2,"coldOrHot":0,"summerOrWinter":3}
