@@ -6,7 +6,7 @@ import featureBySensitivity as fse
 from sklearn.metrics.pairwise import euclidean_distances
 
 
-# 충분한 사용자 데이터가 있는지 파악하여 추천이 가능한지 반화하는 함수
+# 충분한 사용자 데이터가 있는지 파악하여 추천이 가능한지 반환하는 함수
 def check_data(f_name):
     
     with open(f_name, 'r', encoding='utf-8') as f:
@@ -349,13 +349,11 @@ def check_seeking_state(recommends):
 # 이전에 추천했던 기록을 확인해서 추천할 사용자를 조정하는 함수
 def check_recommended_data(u_data, a, b, c):
 
-    best = a[:2]
-    del a[:2]
-    a = a[:10]
-    b = b[:10]
-    c = c[:10]
+    a = a[:12]
+    b = b[:12]
+    c = c[:12]
     
-    result = best
+    result = []
     recommended_data = get_recommended_data(u_data)
     
     basic = [rec for rec in a if rec not in recommended_data]
@@ -363,22 +361,22 @@ def check_recommended_data(u_data, a, b, c):
     real = [rec for rec in a if rec not in recommended_data and rec not in basic and rec not in wish]
     
     if len(real) == 0 and len(wish) == 0:
-        result += basic[:4]
+        result += basic[:6]
     elif len(real) == 0 and len(wish) == 1:
-        result += basic[:3]
+        result += basic[:5]
         result += wish[0]
     elif len(real) == 0 and len(wish) > 1:
-        result += basic[:2]
+        result += basic[:4]
         result += wish[:2]
     elif len(real) > 0 and len(wish) == 0:
-        result += basic[:3]
+        result += basic[:5]
         result += wish[0]
     elif len(real) > 0 and len(wish) == 1:
-        result += basic[:2]
+        result += basic[:4]
         result += wish[0]
         result += real[0]
     else:
-        result += basic[0]
+        result += basic[:3]
         result += wish[:2]
         result += real[0]
     
