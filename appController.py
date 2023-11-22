@@ -15,7 +15,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 class UserData(BaseModel):
-    userId: int
+    userId: str
     bedtimeScore: int
     wakeupScore: int
     wakeupSensitivity: int
@@ -40,20 +40,20 @@ class UserData(BaseModel):
     coldOrHot: int
     summerOrWinter: int
 class UpdatingData(BaseModel):
-    userId: int
+    userId: str
 class WishlistData(BaseModel):
-    userId: int
-    wishId: int
+    userId: str
+    wishId: str
 class MatchingData(BaseModel):
-    userId: int
-    matchingId: int
+    userId: str
+    matchingId: str
 class StateData(BaseModel):
-    userId: int
+    userId: str
     state: bool
 
 # 308관 남자 추천 API 엔드포인트: /8m_rec
-# input: {"ID": int, "_score": int, "_sensitivity": int, ...}
-# output: {"IDs": [int, int, ...]}
+# input: {"ID": str, "_score": int, "_sensitivity": int, ...}
+# output: {"ID1": str, "ID2": str, ...}
 @app.post('/8m_rec')
 def man_308_recommendation(data: UserData):
     data = jsonable_encoder(data)
@@ -61,8 +61,8 @@ def man_308_recommendation(data: UserData):
     return response
 
 # 309관 남자 추천 API 엔드포인트: /9m_rec
-# input: {"ID": int, "_score": int, "_sensitivity": int, ...}
-# output: {"IDs": [int, int, ...]}
+# input: {"ID": str, "_score": int, "_sensitivity": int, ...}
+# output: {"ID1": str, "ID2": str, ...}
 @app.post('/9m_rec')
 def man_309_recommendation(data: UserData):
     data = jsonable_encoder(data)
@@ -70,8 +70,8 @@ def man_309_recommendation(data: UserData):
     return response
 
 # 308관 여자 추천 API 엔드포인트: /8w_rec
-# input: {"ID": int, "_score": int, "_sensitivity": int, ...}
-# output: {"IDs": [int, int, ...]}
+# input: {"ID": str, "_score": int, "_sensitivity": int, ...}
+# output: {"ID1": str, "ID2": str, ...}
 @app.post('/8w_rec')
 def woman_308_recommendation(data: UserData):
     data = jsonable_encoder(data)
@@ -79,8 +79,8 @@ def woman_308_recommendation(data: UserData):
     return response
 
 # 309관 여자 추천 API 엔드포인트: /9w_rec
-# input: {"ID": int, "_score": int, "_sensitivity": int, ...}
-# output: {"IDs": [int, int, ...]}
+# input: {"ID": str, "_score": int, "_sensitivity": int, ...}
+# output: {"ID1": str, "ID2": str, ...}
 @app.post('/9w_rec')
 def woman_309_recommendation(data: UserData):
     data = jsonable_encoder(data)
@@ -88,8 +88,8 @@ def woman_309_recommendation(data: UserData):
     return response
 
 # 추천 리스트 업데이트 API 엔드포인트: /up_rec
-# input: {"ID": int}
-# output: {"IDs": [int, int, ...]}
+# input: {"ID": str}
+# output: {"ID1": str, "ID2": str, ...}
 @app.post('/up_rec')
 def update_recommendation(data: UpdatingData):
     data = jsonable_encoder(data)
@@ -97,7 +97,7 @@ def update_recommendation(data: UpdatingData):
     return response
 
 # 찜 목록 업데이트 API 엔드포인트 : /wish_up
-# input: {"ID": int, "wishID": int}
+# input: {"ID": str, "wishID": str}
 # output: {}
 @app.post('/wish_up')
 def wishlist_update(data: WishlistData):
@@ -106,7 +106,7 @@ def wishlist_update(data: WishlistData):
     return Response(content=None, status_code=200)
 
 # 매칭 데이터 업데이트 API 엔드포인트 : /real_data_up
-# input: {"ID": int, "matchingID": int}
+# input: {"ID": str, "matchingID": str}
 # output: {}
 @app.post('/mdata_up')
 def real_matching_data_update(data: MatchingData):
@@ -115,7 +115,7 @@ def real_matching_data_update(data: MatchingData):
     return Response(content=None, status_code=200)
 
 # 룸메이트 구하는 상태 업데이트 API 엔드포인트 : /state_up
-# input: {"ID": int, "state": bool}
+# input: {"ID": str, "state": bool}
 # output: {}
 @app.post('/state_up')
 def seeking_state_update(data: StateData):
