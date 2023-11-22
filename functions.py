@@ -280,7 +280,6 @@ def sensitive_score_similarity_ranking(u_data, f_name):
         result.append(IDs[rank])
     if u_data["userId"] in result: 
         result.remove(u_data["userId"])
-    result = [int(res) for res in result]
     
     return result
 
