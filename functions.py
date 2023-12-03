@@ -432,7 +432,7 @@ def measure_similarities(u_id, recommended_ids):
     for rank in ranking:
         if IDs[rank] != u_id:
             temp = euclidean_distances_result[-1][rank]
-            similarity = round((10 - temp) * 10, 1)
+            similarity = round((15 - temp) / 3 * 20, 1)
             result.append(similarity)
     
     return result
