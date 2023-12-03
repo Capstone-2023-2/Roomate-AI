@@ -6,10 +6,24 @@ from fastapi import Response
 # 추천 알고리즘 실행 함수
 def main(u_data, f_name):
     
-    if f_name == "update":
+    if f_name == "percent":
+        u_id = u_data["userId"]
+        recommended_ids = func.get_recommended_data(u_data)
+        recommended_ids.append(u_id)
+        temp = func.measure_similarities(u_id, recommended_ids)
+        result = {}
+        result["userId1"] = temp[0]
+        result["userId2"] = temp[1]
+        result["userId3"] = temp[2]
+        result["userId4"] = temp[3]
+        result["userId5"] = temp[4]
+        result["userId6"] = temp[5]
+        return result
+    
+    elif f_name == "update":
         u_id = u_data["userId"]
         u_data, f_name = func.get_userdata_whichfile(u_id)
-         
+    
     if not func.check_data(f_name):
         return Response(content=None, status_code=400)
     
