@@ -12,12 +12,12 @@ def main(u_data, f_name):
         recommended_ids.append(u_id)
         temp = func.measure_similarities(u_id, recommended_ids)
         result = {}
-        result["userId1"] = temp[0]
-        result["userId2"] = temp[1]
-        result["userId3"] = temp[2]
-        result["userId4"] = temp[3]
-        result["userId5"] = temp[4]
-        result["userId6"] = temp[5]
+        result["sensitivity1"] = temp[0]
+        result["sensitivity2"] = temp[1]
+        result["sensitivity3"] = temp[2]
+        result["sensitivity4"] = temp[3]
+        result["sensitivity5"] = temp[4]
+        result["sensitivity6"] = temp[5]
         return result
     
     elif f_name == "update":
