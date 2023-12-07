@@ -86,4 +86,7 @@ def modify(dataset, u_data):
     else: u_data['coldOrHot'] *= 3
     del u_data['summerOrWinter']
     
+    for data in dataset:
+        if data['coldOrHot'] == 0: data['coldOrHot'] = u_data['coldOrHot']
+    
     return dataset, u_data
