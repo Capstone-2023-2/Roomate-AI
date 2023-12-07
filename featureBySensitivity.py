@@ -55,32 +55,32 @@ def modify(dataset, u_data):
     u_data['cleaningScore'] *= cleaningSensitivity
     del u_data['cleaningSensitivity']
     if foodSensitivity == 1: u_data['foodScore'] = 0
-    elif foodSensitivity == 2: u_data['foodScore'] += 3
-    elif foodSensitivity == 3: u_data['foodScore'] += 6
+    elif foodSensitivity == 2: u_data['foodScore'] = 4
+    elif foodSensitivity == 3: u_data['foodScore'] = 9
     del u_data['foodSensitivity']
     u_data['cigaretteScore'] *= 3
     u_data['studyScore'] *= studySensitivity       
     del u_data['studySensitivity']
     if notebookSensitivity == 1: u_data['notebookScore'] = 0
-    elif notebookSensitivity == 2: u_data['notebookScore'] += 3
-    elif notebookSensitivity == 3: u_data['notebookScore'] += 6
+    elif notebookSensitivity == 2: u_data['notebookScore'] = 4
+    elif notebookSensitivity == 3: u_data['notebookScore'] = 9
     del u_data['notebookSensitivity']
     if alarmSensitivity == 1: u_data['alarmScore'] = 0
-    elif alarmSensitivity == 2: u_data['alarmScore'] += 3
-    elif alarmSensitivity == 3: u_data['alarmScore'] += 6
+    elif alarmSensitivity == 2: u_data['alarmScore'] = 4
+    elif alarmSensitivity == 3: u_data['alarmScore'] = 9
     del u_data['alarmSensitivity']
     if latestudySensitivity == 1: u_data['latestudyScore'] = 0
-    elif latestudySensitivity == 2: u_data['latestudyScore'] += 3
-    elif latestudySensitivity == 3: u_data['latestudyScore'] += 6
+    elif latestudySensitivity == 2: u_data['latestudyScore'] = 4
+    elif latestudySensitivity == 3: u_data['latestudyScore'] = 9
     del u_data['latestudySensitivity']
     if snoringSensitivity == 1: u_data['snoringScore'] = 0
-    elif snoringSensitivity == 2: u_data['snoringScore'] += 3
-    elif snoringSensitivity == 3: u_data['snoringScore'] += 6
+    elif snoringSensitivity == 2: u_data['snoringScore'] = 4
+    elif snoringSensitivity == 3: u_data['snoringScore'] = 9
     del u_data['snoringSensitivity']
     u_data['friendlyScore'] *= 3
     if inhomeSensitivity == 1: u_data['inhomeScore'] = 0
-    elif inhomeSensitivity == 2: u_data['inhomeScore'] += 3
-    elif inhomeSensitivity == 3: u_data['inhomeScore'] += 6
+    elif inhomeSensitivity == 2: u_data['inhomeScore'] = 4
+    elif inhomeSensitivity == 3: u_data['inhomeScore'] = 9
     del u_data['inhomeSensitivity']
     if coldOrHot == 0: u_data['coldOrHot'] = 0
     else: u_data['coldOrHot'] *= 3

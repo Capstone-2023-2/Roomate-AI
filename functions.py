@@ -210,7 +210,8 @@ def score_similarity_ranking(u_data, f_name):
         dataset = json.load(f)
     
     dataset, user_data = fsc.modify(dataset, u_data)
-    dataset[-1] = user_data
+    del dataset[-1]
+    dataset.append(user_data)
     
     df = pd.DataFrame(dataset)
     n_array = df.to_numpy()
@@ -263,7 +264,8 @@ def sensitive_score_similarity_ranking(u_data, f_name):
         dataset = json.load(f)
     
     dataset, user_data = fse.modify(dataset, u_data)
-    dataset[-1] = user_data
+    del dataset[-1]
+    dataset.append(user_data)
     #dataset = check_cluster(u_data, f_name)
     
     df = pd.DataFrame(dataset)
@@ -278,7 +280,7 @@ def sensitive_score_similarity_ranking(u_data, f_name):
     
     for rank in ranking:
         result.append(IDs[rank])
-    if u_data["userId"] in result: 
+    if u_data["userId"] in result:
         result.remove(u_data["userId"])
     
     return result
@@ -286,7 +288,7 @@ def sensitive_score_similarity_ranking(u_data, f_name):
 # 성향 유사도 기반 추천 함수
 def basic_recommend(u_data, f_name):
     
-    result = sensitive_score_similarity_ranking(u_data, f_name)   
+    result = sensitive_score_similarity_ranking(u_data, f_name)
     
     return result
 
