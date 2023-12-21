@@ -89,6 +89,15 @@ def woman_309_recommendation(data: UserData):
 
 # 추천 리스트 업데이트 API 엔드포인트: /up_rec
 # input: {"ID": str}
+# output: {"similarity1": float, "similarity2": float, ...}
+@app.post('/percent')
+def measure_recommendation(data: UpdatingData):
+    data = jsonable_encoder(data)
+    response = main.main(data, "percent")
+    return response
+
+# 추천 리스트 업데이트 API 엔드포인트: /up_rec
+# input: {"ID": str}
 # output: {"ID1": str, "ID2": str, ...}
 @app.post('/up_rec')
 def update_recommendation(data: UpdatingData):
