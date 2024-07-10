@@ -1,5 +1,5 @@
 <h1>Aniroomie</h1>
-CAU 2023-2 Capstone Project<br>
+CAU 2023-2 Capstone Project<br><br>
 대학교 기숙사 룸메이트 추천 모바일 웹 서비스입니다.
 <br><br>
 <h2>모바일 웹 페이지</h2>
