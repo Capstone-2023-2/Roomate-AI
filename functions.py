@@ -210,6 +210,8 @@ def score_similarity_ranking(u_data, f_name):
         dataset = json.load(f)
     
     dataset, user_data = fsc.modify(dataset, u_data)
+    del dataset[-1]
+    dataset.append(user_data)
     
     df = pd.DataFrame(dataset)
     n_array = df.to_numpy()
@@ -261,9 +263,9 @@ def sensitive_score_similarity_ranking(u_data, f_name):
     with open(f_name, 'r', encoding='utf-8') as f:
         dataset = json.load(f)
     
-    #dataset = [data for data in dataset if u_data["smoking_score"] == data["smoking_score"]]
-    
     dataset, user_data = fse.modify(dataset, u_data)
+    del dataset[-1]
+    dataset.append(user_data)
     #dataset = check_cluster(u_data, f_name)
     
     df = pd.DataFrame(dataset)
@@ -278,7 +280,7 @@ def sensitive_score_similarity_ranking(u_data, f_name):
     
     for rank in ranking:
         result.append(IDs[rank])
-    if u_data["userId"] in result: 
+    if u_data["userId"] in result:
         result.remove(u_data["userId"])
     
     return result
@@ -286,7 +288,7 @@ def sensitive_score_similarity_ranking(u_data, f_name):
 # 성향 유사도 기반 추천 함수
 def basic_recommend(u_data, f_name):
     
-    result = sensitive_score_similarity_ranking(u_data, f_name)   
+    result = sensitive_score_similarity_ranking(u_data, f_name)
     
     return result
 
@@ -408,7 +410,37 @@ def check_cluster(u_data, f_name):
     result = [data for data in dataset if data["userId"] in result]
     
     return result
+
+# 추천 리스트에 대한 유사도 측정
+def measure_similarities(u_id, recommended_ids):
     
+    result = []
+    dataset = []
+    
+    for recommended_id in recommended_ids:
+        data, _ = get_userdata_whichfile(recommended_id)
+        dataset.append(data)
+    
+    dataset, _ = fsc.modify(dataset, "")
+    
+    df = pd.DataFrame(dataset)
+    n_array = df.to_numpy()
+    
+    IDs = n_array[:, 0]
+    features = n_array[:, 1:]
+    
+    euclidean_distances_result = euclidean_distances(features, features)
+    ranking = np.argsort(euclidean_distances_result)[-1]
+    ranking = ranking.tolist()
+    
+    for rank in ranking:
+        if IDs[rank] != u_id:
+            temp = euclidean_distances_result[-1][rank]
+            similarity = round((15 - temp) / 3 * 20, 1)
+            result.append(similarity)
+    
+    return result
+
 # 전체 추천 목록 업데이트
 def update_user():
       
